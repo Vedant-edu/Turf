@@ -1,4 +1,5 @@
 import { ChevronRight, CreditCard, HelpCircle, Settings, Share2, Coins } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function Account() {
   return (
@@ -9,9 +10,9 @@ export default function Account() {
             <h1 className="text-2xl font-bold">Name</h1>
             <p className="text-sm text-gray-600">9454661666  •  emailuse@gmail.com</p>
           </div>
-          <button className="bg-black hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">
+          <Link to="/welcome" className="bg-black hover:bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium">
            LOGOUT
-          </button>
+          </Link>
         </div>
         <div className="bg-emerald-900 text-white p-3 rounded-lg">
           <div className="flex items-center space-x-2 mb-1">

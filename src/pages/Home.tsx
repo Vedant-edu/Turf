@@ -71,7 +71,7 @@ export default function Home() {
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative z-10 px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 px-4 py-8">
             {filteredTurfs.map(turf => (
               <TurfCard key={turf.id} turf={turf} />
             ))}

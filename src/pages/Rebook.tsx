@@ -36,12 +36,12 @@ export default function Rebook() {
               <div className="flex-1 p-6">
                 <h3 className="text-2xl font-semibold text-green-800 mb-2">{booking.name}</h3>
                 <div className="flex items-center gap-2 text-green-600 text-lg">
-                  <Calendar className="w-5 h-5" />
                   <span>{booking.date}</span>
+                  <Calendar className="w-5 h-5" />
                 </div>
               </div>
               <div className="flex-1 px-6 py-1 bg-green-100 md:bg-transparent">
-                <div className="flex items-center gap-2 text-green-700 text-lg mb-2">
+                <div className="flex items-center gap-2 text-green-400 text-lg mb-2">
                   <Clock className="w-5 h-5" />
                   <span>{booking.time}</span>
                 </div>
