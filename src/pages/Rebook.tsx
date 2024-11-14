@@ -25,13 +25,13 @@ export default function Rebook() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="max-w-6xl mx-auto p-4 mb-16">
       <h1 className='text-[56px] px-4 flex justify-between text-black font-mono relative z-10'>
         Rebook
       </h1>
       <div className="space-y-4">
         {bookings.map((booking) => (
-          <div key={booking.id} className="bg-green-50 border border-green-200 rounded-lg shadow-md overflow-hidden">
+          <div key={booking.id} className="border border-green-200 rounded-lg shadow-md overflow-hidden">
             <div className="flex flex-col md:flex-row md:items-center">
               <div className="flex-1 p-6">
                 <h3 className="text-2xl font-semibold text-green-800 mb-2">{booking.name}</h3>

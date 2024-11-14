@@ -1,7 +1,7 @@
 
 export default function Page() {
   return (
-    <div className='flex justify-center' style={{ backgroundImage: 'url(/images/topground.jpg)', backgroundSize: 'cover' }}>
+    <div className='flex justify-center' style={{ backgroundImage: 'url(https://raw.githubusercontent.com/Vedant-edu/Turf/main/images/topground.jpg)', backgroundSize: 'cover' }}>
       <div className='max-w-3xl mx-auto h-screen w-full'>
         <h1 className='text-[64px] p-4 mb-4 text-white font-mono bg-gradient-to-r from-transparent via-transparent to-transparent bg-opacity-50 backdrop-filter backdrop-blur-md'>Turfer</h1>
         <h1 className='text-[44px] p-4 mb-4 text-white font-mono'>

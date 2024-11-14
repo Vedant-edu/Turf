@@ -61,14 +61,14 @@ export default function MyBookings() {
   return (
     <div className="container mx-auto p-4 ">
       <h1 className='text-[56px] px-4 flex justify-between text-black font-mono relative z-10'>
-            My Bookings 
+          Bookings 
             
           </h1>
       
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {currentBooking && (
           <div className="md:col-span-2 lg:col-span-3">
-            <h2 className="text-xl md:text-2xl font-semibold text-green-700 mb-4">Currently Playing</h2>
+            <h2 className="text-xl md:text-2xl font-semibold text-green-700 mb-4">Upcoming Booking</h2>
             <div className="bg-green-100 border-l-4 border-green-500 rounded-lg p-4 transition-all duration-300 ease-in-out hover:bg-green-200">
               <BookingCard booking={currentBooking} />
             </div>
@@ -76,7 +76,7 @@ export default function MyBookings() {
         )}
         
         <div className="md:col-span-2 lg:col-span-3">
-          <h2 className="text-xl md:text-2xl font-semibold text-green-700 mb-4">Upcoming Bookings</h2>
+          <h2 className="text-xl md:text-2xl font-semibold text-green-700 mb-4">Recent Bookings</h2>
           {upcomingBookings.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-14">
               {upcomingBookings.map(booking => (

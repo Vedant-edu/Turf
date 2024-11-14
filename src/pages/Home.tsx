@@ -47,7 +47,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto ">
         <div className='max-w-3xl mx-auto h-36 rounded-b-sm home-page-content'
           style={{
-            backgroundImage: 'url(/images/topground.jpg)',
+            backgroundImage: 'url(https://raw.githubusercontent.com/Vedant-edu/Turf/main/images/topground.jpg)',
             backgroundSize: 'cover',
             transition: 'transform 0.5s ease-in-out',
             transitionTimingFunction: 'ease-in-out',
