@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { mockBookings } from "../data/mock";
 import { useUser } from "@clerk/clerk-react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 interface Booking {
   userEmail: string;
@@ -13,6 +14,7 @@ interface Booking {
 
 const BookingsScreen = () => {
   const { user } = useUser();
+  const navigate = useNavigate(); // Initialize navigate
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
   const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
 
@@ -50,6 +52,12 @@ const BookingsScreen = () => {
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
+        <button
+          className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white shadow-md"
+          onClick={() => navigate("/welcome")} // Navigate to /welcome
+        >
+          Go to Welcome
+        </button>
       </div>
 
       {/* Bookings List */}

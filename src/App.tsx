@@ -52,9 +52,7 @@ function App() {
                 <SignedIn>
                   <Navigate to="/" replace />
                 </SignedIn>
-                <SignedOut>
-                  <Welcome />
-                </SignedOut>
+                
               </>
             }
           />
