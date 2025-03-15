@@ -59,10 +59,14 @@ function App() {
             }
           />
           
-          {/* Default redirect for unknown routes */}
+          {/* Redirect to /welcome if user is signed out */}
           <Route
             path="*"
-            element={<Navigate to="/welcome" replace />}
+            element={
+              <SignedOut>
+                <Navigate to="/welcome" replace />
+              </SignedOut>
+            }
           />
         </Routes>
         
