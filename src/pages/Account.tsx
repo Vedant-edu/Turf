@@ -1,10 +1,12 @@
+import { UserProfile } from '@clerk/clerk-react';
 import { ChevronRight, CreditCard, HelpCircle, Settings, Share2, Coins } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 export default function Account() {
   return (
-    <div className="max-w-md mx-auto min-h-screen ">
-      <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
+    <div className="max-w-4xl mx-auto min-h-screen w-full ">
+      <UserProfile/>
+      {/* <div className="bg-white rounded-lg shadow-sm p-4 mb-4">
         <div className="flex justify-between items-start mb-4">
           <div>
             <h1 className="text-2xl font-bold">Name</h1>
@@ -28,7 +30,7 @@ export default function Account() {
         <AccountOption icon={<Coins className="w-6 h-6" />} text="Credits: ₹0" />
         <AccountOption icon={<CreditCard className="w-6 h-6" />} text="Saved Payment Methods" />
         <AccountOption icon={<HelpCircle className="w-6 h-6" />} text="Help & Support" />
-      </div>
+      </div> */}
     </div>
   )
 }

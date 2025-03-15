@@ -1,37 +1,75 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import TurfDetails from './pages/TurfDetails';
 import BookingConfirmation from './pages/BookingConfirmation';
-import Rebook from './pages/Rebook';
+import Rebook from './pages/Categories';
 import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
-import BottomNavbar from './components/BottomNavbar';
-import { KindeProvider } from "@kinde-oss/kinde-auth-react";
+import BottomBar from './components/BottomNavbar';
 import Welcome from './pages/Welcome';
+import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
 
 function App() {
   return (
-    <KindeProvider
-      clientId="9ca5369c6f3c4d3cbed9d742979c7ded"
-      domain="http://localhost:3000"
-      logoutUri="http://localhost:3000/welcome"
-      redirectUri="http://localhost:3000"
-    >
-      <BrowserRouter>
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/turf/:id" element={<TurfDetails />} />
-            <Route path="/booking-confirmation" element={<BookingConfirmation />} />
-            <Route path="/rebook" element={<Rebook />} />
-            <Route path="/mybooking" element={<MyBookings />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/welcome" element={<Welcome />} />
-          </Routes>
-          <BottomNavbar />
-        </div>
-      </BrowserRouter>
-    </KindeProvider>
+    <BrowserRouter>
+      <div>
+        <Routes>
+          {/* Protected routes that require authentication */}
+          <Route
+            path="/"
+            element={
+              <SignedIn>
+                <Home />
+              </SignedIn>
+            }
+          />
+          <Route
+            path="/turf/:id"
+            element={<TurfDetails />}
+          />
+          <Route
+            path="/booking-confirmation"
+            element={<BookingConfirmation />}
+          />
+          <Route
+            path="/rebook"
+            element={<Rebook />}
+          />
+          <Route
+            path="/mybooking"
+            element={<MyBookings />}
+          />
+          <Route
+            path="/account"
+            element={<Account />}
+          />
+          
+          {/* Welcome page with redirect logic */}
+          <Route
+            path="/welcome"
+            element={
+              <>
+                <SignedIn>
+                  <Navigate to="/" replace />
+                </SignedIn>
+                <SignedOut>
+                  <Welcome />
+                </SignedOut>
+              </>
+            }
+          />
+          
+          {/* Default redirect for unknown routes */}
+          <Route
+            path="*"
+            element={<Navigate to="/welcome" replace />}
+          />
+        </Routes>
+        
+        {/* Only show BottomBar if the current path is not "/welcome" */}
+      </div>
+        {window.location.pathname !== '/welcome' && <BottomBar />}
+    </BrowserRouter>
   );
 }
 

@@ -10,7 +10,7 @@ export default function BottomBar() {
 
   const tabs = [
     { id: "home", icon: Home, label: "Home", path: "/" },
-    { id: "rebook", icon: RefreshCw, label: "Rebook", path: "/rebook" },
+    { id: "rebook", icon: RefreshCw, label: "Categories", path: "/rebook" },
     { id: "mybookings", icon: Calendar, label: "My Bookings", path: "/mybooking" },
     { id: "account", icon: User, label: "Account", path: "/account" },
   ]

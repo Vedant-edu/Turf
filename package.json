@@ -1,5 +1,5 @@
 {
-  "name": "turf-booking-app",
+  "name": "turfer-official",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.24.2",
     "@kinde-oss/kinde-auth-react": "^4.0.4",
     "date-fns": "^3.3.1",
     "firebase": "^11.0.1",

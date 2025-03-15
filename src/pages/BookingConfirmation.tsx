@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, MapPin, CheckCircle, Download } from 'lucide-react';
 import { format } from 'date-fns';
