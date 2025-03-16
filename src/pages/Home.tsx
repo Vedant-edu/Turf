@@ -4,6 +4,7 @@ import SearchBar from '../components/SearchBar';
 import PincodePage from './PincodePage';
 import { turfs } from '../data/turfs';
 import { MapPin } from 'lucide-react';
+import BottomBar from '../components/BottomBar';
 
 export default function Home() {
   const [needsPincode, setNeedsPincode] = useState(false);
@@ -79,6 +80,7 @@ export default function Home() {
         </div>
 
       </div>
+      <BottomBar />
     </div>
   );
 }

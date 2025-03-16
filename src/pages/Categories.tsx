@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import BottomBar from '../components/BottomBar';
+import AppBarComponent from '../components/AppBar';
 
 interface Category {
   id: string;
@@ -82,18 +84,19 @@ const amenities: Amenity[] = [
 const CategoriesScreen: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleCategoryPress = (category: string) => {
+  const handleCategoryPress = (_category: string) => {
     navigate('/');
   };
 
-  const handleAmenityPress = (amenity: string) => {
+  const handleAmenityPress = (_amenity: string) => {
     navigate('/');
   };
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <div className="max-w-3xl mx-auto px-4 py-6">
-        <h2 className="text-lg font-semibold text-gray-800 mt-4 mb-3">Sports Categories</h2>
+      <AppBarComponent appbartitle='Categories'/>
+      <div className="max-w-3xl mx-auto px-4">
+        
         <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-3">
           {categories.map((category) => (
             <div
@@ -155,6 +158,7 @@ const CategoriesScreen: React.FC = () => {
           </div>
         </div>
       </div>
+      <BottomBar/>
     </div>
   );
 };

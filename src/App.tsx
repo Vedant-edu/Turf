@@ -5,9 +5,9 @@ import BookingConfirmation from './pages/BookingConfirmation';
 import Rebook from './pages/Categories';
 import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
-import BottomBar from './components/BottomNavbar';
 import Welcome from './pages/Welcome';
 import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
+import BottomBar from './components/BottomBar';
 
 function App() {
   return (
@@ -18,33 +18,83 @@ function App() {
           <Route
             path="/"
             element={
-              <SignedIn>
-                <Home />
-              </SignedIn>
+              <>
+                <SignedIn>
+                  <Home />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
             }
           />
           <Route
             path="/turf/:id"
-            element={<TurfDetails />}
+            element={
+              <>
+                <SignedIn>
+                  <TurfDetails />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
+            }
           />
           <Route
             path="/booking-confirmation"
-            element={<BookingConfirmation />}
+            element={
+              <>
+                <SignedIn>
+                  <BookingConfirmation />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
+            }
           />
           <Route
             path="/rebook"
-            element={<Rebook />}
+            element={
+              <>
+                <SignedIn>
+                  <Rebook />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
+            }
           />
           <Route
             path="/mybooking"
-            element={<MyBookings />}
+            element={
+              <>
+                <SignedIn>
+                  <MyBookings />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
+            }
           />
           <Route
             path="/account"
-            element={<Account />}
+            element={
+              <>
+                <SignedIn>
+                  <Account />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
+            }
           />
-          
-          {/* Welcome page with redirect logic */}
+
+          {/* Welcome page */}
           <Route
             path="/welcome"
             element={
@@ -52,25 +102,32 @@ function App() {
                 <SignedIn>
                   <Navigate to="/" replace />
                 </SignedIn>
-                
+                <SignedOut>
+                  <Welcome />
+                </SignedOut>
               </>
             }
           />
-          
-          {/* Redirect to /welcome if user is signed out */}
+
+          {/* Redirect any other path */}
           <Route
             path="*"
             element={
-              <SignedOut>
-                <Navigate to="/welcome" replace />
-              </SignedOut>
+              <>
+                <SignedIn>
+                  <Navigate to="/" replace />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/welcome" replace />
+                </SignedOut>
+              </>
             }
           />
         </Routes>
-        
-        {/* Only show BottomBar if the current path is not "/welcome" */}
       </div>
-        {window.location.pathname !== '/welcome' && <BottomBar />}
+
+      {/* Only show BottomBar if the user is signed in and not on the welcome page */}
+      
     </BrowserRouter>
   );
 }

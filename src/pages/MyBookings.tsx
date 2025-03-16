@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { mockBookings } from "../data/mock";
 import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import BottomBar from "../components/BottomBar";
+import AppBarComponent from "../components/AppBar";
 
 interface Booking {
   userEmail: string;
@@ -11,7 +13,6 @@ interface Booking {
   bookingTime: string;
   amountPaid: string;
 }
-
 const BookingsScreen = () => {
   const { user } = useUser();
   const navigate = useNavigate(); // Initialize navigate
@@ -36,9 +37,10 @@ const BookingsScreen = () => {
   }, [user, activeTab]);
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto">
       {/* Tab Navigation */}
-      <div className="flex justify-center gap-4 mb-6">
+      <AppBarComponent appbartitle='My Bookings'/>
+      <div className="flex justify-center gap-4 mb-6 p-6">
         {["upcoming", "past"].map((tab) => (
           <button
             key={tab}
@@ -66,7 +68,7 @@ const BookingsScreen = () => {
           <p>No {activeTab} bookings found.</p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 px-4">
           {filteredBookings.map((booking, index) => (
             <div
               key={index}
@@ -85,6 +87,7 @@ const BookingsScreen = () => {
           ))}
         </div>
       )}
+      <BottomBar/>
     </div>
   );
 };

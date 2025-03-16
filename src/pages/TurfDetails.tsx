@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
@@ -73,6 +73,7 @@ export default function TurfDetails() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* <Payment values={bookingData} /> */}
       <div className="max-w-4xl mx-auto py-8">
         <button
           onClick={() => navigate(-1)}
