@@ -1,98 +1,93 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DayPicker } from 'react-day-picker';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { ChevronLeft, MapPin, Clock } from 'lucide-react';
 import { turfs } from '../data/turfs';
-import { mockBookings } from '../data/mock';  // Import mock bookings data
-import 'react-day-picker/dist/style.css';
+import { mockBookings } from '../data/mock';
 import { useUser } from '@clerk/clerk-react';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export default function TurfDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const turf = turfs.find(t => t.id === id);
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedTime, setSelectedTime] = useState<string>();
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const { user } = useUser();
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const [bookedTimeSlots, setBookedTimeSlots] = useState<string[]>([]);
 
-  // Update booked time slots when selected date changes
+
   useEffect(() => {
-    if (selectedDate && turf) {
-      // Find all bookings for this turf on the selected date
-      const formattedSelectedDate = format(selectedDate, 'MMM d, yyyy');
-      
-      const bookedSlots = mockBookings.filter(
-        booking => 
-          booking.turfId === turf.id && 
-          booking.bookingDate === formattedSelectedDate
-      ).map(booking => booking.bookingTime);
-      
-      setBookedTimeSlots(bookedSlots);
-      
-      // Clear selected time if it's now in booked slots
-      if (selectedTime && bookedSlots.includes(selectedTime)) {
-        setSelectedTime(undefined);
+    const fetchBookings = async () => {
+      if (selectedDate && turf) {
+        const formattedDate = format(new Date(selectedDate), 'yyyy-MM-dd');
+        
+        // Fetch booked slots from Supabase
+        const { data, error } = await supabase
+          .from('bookings')
+          .select('booking_time')
+          .eq('turf_id', turf.id)
+          .eq('booking_date', formattedDate);
+
+        if (error) {
+          console.error('Error fetching bookings:', error);
+        } else {
+          setBookedTimeSlots(data.map(b => b.booking_time));
+        }
       }
-    }
-  }, [selectedDate, turf, selectedTime]);
+    };
+
+    fetchBookings();
+  }, [selectedDate, turf]);
 
   if (!turf) {
     return <div>Turf not found</div>;
   }
-
-  const handleBooking = () => {
+  const handleBooking = async () => {
     if (selectedDate && selectedTime) {
-      // Log all booking data only when confirm booking is clicked
       const bookingData = {
-        userEmail,
-        turfId: turf.id,
-        turfName: turf.name,
-        bookingDate: format(selectedDate, 'MMM d, yyyy'),
-        bookingTime: selectedTime,
-        amountPaid: `₹${turf.pricePerHour}`
+        user_email: userEmail,
+        turf_id: turf.id,
+        turf_name: turf.name,
+        booking_date: format(new Date(selectedDate), 'yyyy-MM-dd'),
+        booking_time: selectedTime,
+        amount_paid: `₹${turf.pricePerHour}`,
       };
-      
-      console.log(bookingData);
-      
-      navigate('/booking-confirmation', {
-        state: {
-          turf,
-          date: selectedDate,
-          time: selectedTime
-        }
-      });
+
+      // Insert booking into Supabase
+      const { error } = await supabase.from('bookings').insert([bookingData]);
+
+      if (error) {
+        console.error('Error inserting booking:', error);
+        return;
+      }
+
+      navigate('/booking-confirmation', { state: { turf, date: new Date(selectedDate), time: selectedTime } });
+      console.log("data added sucessfully");
     }
   };
 
-  const isTimeSlotBooked = (time: string) => {
-    return bookedTimeSlots.includes(time);
-  };
+  const isTimeSlotBooked = (time: string) => bookedTimeSlots.includes(time);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* <Payment values={bookingData} /> */}
-      <div className="max-w-4xl mx-auto py-8">
-        <button
-          onClick={() => navigate(-1)}
-          className="flex items-center text-gray-600 mb-6 hover:text-gray-900"
-        >
+    <div className="min-h-screen p-2">
+      <div className="max-w-7xl mx-auto py-8">
+        <button onClick={() => navigate(-1)} className="flex items-center text-gray-600 mb-6 hover:text-gray-900">
           <ChevronLeft className="w-5 h-5" />
           <span>Back to turfs</span>
         </button>
 
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="rounded-lg overflow-hidden">
           <div className="relative h-64">
-            <img
-              src={turf.images[0]}
-              alt={turf.name}
-              className="w-full h-full object-cover"
-            />
+            <img src={turf.images[0]} alt={turf.name} className="w-full h-full object-cover" />
           </div>
 
-          <div className="p-6">
+          <div className="py-6">
             <h1 className="text-3xl font-bold mb-4">{turf.name}</h1>
             
             <div className="flex items-center text-gray-600 mb-4">
@@ -101,32 +96,43 @@ export default function TurfDetails() {
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
+              {/* Scrollable Date Picker for Mobile */}
               <div>
-                <h2 className="text-xl font-semibold mb-4">Select Date</h2>
-                <DayPicker
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    setSelectedDate(date);
-                    setSelectedTime(undefined); // Reset time when date changes
-                  }}
-                  fromDate={new Date()}
-                  className="border rounded-lg p-3"
-                />
+                <h2 className="text-xl font-semibold mb-2">
+                  {format(selectedDate ? new Date(selectedDate) : new Date(), 'MMMM yyyy')}
+                </h2>
+                <div className="flex space-x-4 py-3">
+                  {Array.from({ length: 7 }, (_, i) => addDays(new Date(), i)).map(date => {
+                    const isSelected = selectedDate && format(new Date(selectedDate), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
+                    return (
+                      <button
+                        key={format(date, 'yyyy-MM-dd')}
+                        onClick={() => setSelectedDate(format(date, 'yyyy-MM-dd'))}
+                        className={`p-3 rounded-lg border min-w-[60px] flex flex-col items-center whitespace-nowrap
+                          ${isSelected ? 'bg-green-600 text-white border-transparent' : 'border-gray-300 hover:border-green-600'}
+                        `}
+                      >
+                        <span className="text-sm font-medium">{format(date, 'EEE')}</span>
+                        <span className="text-lg font-semibold">{format(date, 'd')}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
+              {/* Time Slot Selection */}
               <div>
                 <h2 className="text-xl font-semibold mb-4">Select Time</h2>
                 {selectedDate ? (
-                  <div className="grid grid-cols-3 gap-2">
-                    {turf.availableTimeSlots.map((time) => {
+                  <div className="flex flex-wrap gap-2">
+                    {turf.availableTimeSlots.map(time => {
                       const isBooked = isTimeSlotBooked(time);
                       return (
                         <button
                           key={time}
                           onClick={() => !isBooked && setSelectedTime(time)}
                           disabled={isBooked}
-                          className={`p-2 rounded-lg border flex items-center justify-center gap-2
+                          className={`py-2 rounded-lg border flex items-center justify-center gap-2 w-20
                             ${isBooked 
                               ? 'bg-gray-200 text-gray-400 cursor-not-allowed border-gray-200' 
                               : selectedTime === time
@@ -136,7 +142,6 @@ export default function TurfDetails() {
                         >
                           <Clock className="w-4 h-4" />
                           {time}
-                          {isBooked && <span className="text-xs ml-1">(Booked)</span>}
                         </button>
                       );
                     })}
@@ -169,6 +174,19 @@ export default function TurfDetails() {
           </div>
         </div>
       </div>
+
+      {/* Hide Scrollbar on Mobile */}
+      <style>
+        {`
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}
+      </style>
     </div>
   );
 }

@@ -174,5 +174,85 @@ export const turfs = [
       '06:00', '07:00', '08:00', '09:00',
       '16:00', '17:00', '18:00', '19:00'
     ]
+  },
+  {
+    id: '12',
+    name: 'Pune Turf Paradise',
+    address: 'Viman Nagar, Pune 411041',
+    images: [
+      'https://cdn.ecommercedns.uk/files/5/225785/3/4344273/turfroll.jpg',
+      'https://th.bing.com/th/id/OIP.iPGADLHFSYajSF2Td6JFfgHaE7?w=337&h=184&c=7&r=0&o=5&dpr=1.4&pid=1.7',
+    ],
+    pricePerHour: 1300,
+    amenities: ['Premium Turf', 'Locker Room', 'First Aid', 'Water Dispenser'],
+    rating: 4.8,
+    availableTimeSlots: [
+      '06:00', '07:00', '08:00', '09:00',
+      '17:00', '18:00', '19:00', '20:00'
+    ]
+  },
+  {
+    id: '13',
+    name: 'Sports Oasis',
+    address: 'Kalyani Nagar, Pune 411041',
+    images: [
+      'https://images.unsplash.com/photo-1517478712532-1e1427056460?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1580842552190-afe9bcd2aacc?auto=format&fit=crop&q=80&w=800',
+    ],
+    pricePerHour: 1200,
+    amenities: ['Floodlights', 'Restrooms', 'Parking'],
+    rating: 4.5,
+    availableTimeSlots: [
+      '06:00', '07:00', '08:00',
+      '17:00', '18:00', '19:00', '20:00'
+    ]
+  },
+  {
+    id: '14',
+    name: 'Turf Haven',
+    address: 'Yerawada, Pune 411041',
+    images: [
+      'https://images.unsplash.com/photo-1561043433-aaf687c4cf4a?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1560804926-1c379d7b4ce3?auto=format&fit=crop&q=80&w=800',
+    ],
+    pricePerHour: 1400,
+    amenities: ['Premium Turf', 'Locker Room', 'First Aid', 'Water Dispenser'],
+    rating: 4.9,
+    availableTimeSlots: [
+      '06:00', '07:00', '08:00', '09:00',
+      '17:00', '18:00', '19:00', '20:00'
+    ]
+  },
+  {
+    id: '15',
+    name: 'Pune Sports Village',
+    address: 'Lohegaon, Pune 411041',
+    images: [
+      'https://images.unsplash.com/photo-1584880680972-2cfa9c729d4b?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1518033123629-99c15c617eb5?auto=format&fit=crop&q=80&w=800',
+    ],
+    pricePerHour: 1100,
+    amenities: ['Night Lighting', 'Cafeteria', 'Seating Area'],
+    rating: 4.3,
+    availableTimeSlots: [
+      '08:00', '09:00', '10:00',
+      '17:00', '18:00', '19:00', '20:00'
+    ]
+  },
+  {
+    id: '16',
+    name: 'Green Turf Arena',
+    address: 'Hadapsar, Pune 411041',
+    images: [
+      'https://images.unsplash.com/photo-1529991945565-15a1b18d8554?auto=format&fit=crop&q=80&w=800',
+      'https://images.unsplash.com/photo-1603244118657-fbdba14dcae4?auto=format&fit=crop&q=80&w=800',
+    ],
+    pricePerHour: 1250,
+    amenities: ['Changing Rooms', 'Floodlights', 'Restrooms'],
+    rating: 4.4,
+    availableTimeSlots: [
+      '06:00', '07:00', '08:00', '09:00',
+      '16:00', '17:00', '18:00', '19:00'
+    ]
   }
 ];

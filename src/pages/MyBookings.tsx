@@ -1,45 +1,62 @@
 import { useState, useEffect } from "react";
-import { mockBookings } from "../data/mock";
 import { useUser } from "@clerk/clerk-react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import BottomBar from "../components/BottomBar";
 import AppBarComponent from "../components/AppBar";
+import { createClient } from "@supabase/supabase-js";
+
+// ✅ Initialize Supabase
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface Booking {
-  userEmail: string;
-  turfId: string;
-  turfName: string;
-  bookingDate: string;
-  bookingTime: string;
-  amountPaid: string;
+  user_email: string;
+  turf_name: string;
+  booking_date: string;
+  booking_time: string;
+  amount_paid: string;
 }
+
 const BookingsScreen = () => {
   const { user } = useUser();
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
-  const [filteredBookings, setFilteredBookings] = useState<Booking[]>([]);
+  const [bookings, setBookings] = useState<Booking[]>([]);
 
+  // ✅ Fetch bookings from Supabase
   useEffect(() => {
     if (!user) return;
 
-    const today = new Date();
-    const userBookings = mockBookings.filter(
-      (booking) => booking.userEmail === user.primaryEmailAddress?.emailAddress
-    );
+    const fetchBookings = async () => {
+      const { data, error } = await supabase
+        .from("bookings")
+        .select("*")
+        .eq("user_email", user.primaryEmailAddress?.emailAddress);
 
-    setFilteredBookings(
-      userBookings.filter((booking) =>
-        activeTab === "upcoming"
-          ? new Date(booking.bookingDate) >= today
-          : new Date(booking.bookingDate) < today
-      )
-    );
-  }, [user, activeTab]);
+      if (error) {
+        console.error("Error fetching bookings:", error);
+      } else {
+        setBookings(data);
+      }
+    };
+
+    fetchBookings();
+  }, [user]);
+
+  // ✅ Filter bookings based on selected tab
+  const today = new Date();
+  const filteredBookings = bookings.filter((booking) =>
+    activeTab === "upcoming"
+      ? new Date(booking.booking_date) >= today
+      : new Date(booking.booking_date) < today
+  );
 
   return (
     <div className="max-w-3xl mx-auto">
+      <AppBarComponent appbartitle="My Bookings" />
+
       {/* Tab Navigation */}
-      <AppBarComponent appbartitle='My Bookings'/>
       <div className="flex justify-center gap-4 mb-6 p-6">
         {["upcoming", "past"].map((tab) => (
           <button
@@ -56,7 +73,7 @@ const BookingsScreen = () => {
         ))}
         <button
           className="px-6 py-2 text-sm font-medium rounded-lg bg-blue-600 text-white shadow-md"
-          onClick={() => navigate("/welcome")} // Navigate to /welcome
+          onClick={() => navigate("/welcome")}
         >
           Go to Welcome
         </button>
@@ -75,19 +92,20 @@ const BookingsScreen = () => {
               className="border border-gray-200 rounded-xl p-5 shadow-lg bg-white transition-transform hover:scale-[1.02]"
             >
               <h3 className="text-lg font-semibold text-gray-900">
-                {booking.turfName}
+                {booking.turf_name}
               </h3>
               <p className="text-sm text-gray-500">
-                📅 {booking.bookingDate} | ⏰ {booking.bookingTime}
+                📅 {booking.booking_date} | ⏰ {booking.booking_time}
               </p>
               <p className="mt-2 text-lg font-semibold text-green-600">
-                ₹{booking.amountPaid}
+                {booking.amount_paid}
               </p>
             </div>
           ))}
         </div>
       )}
-      <BottomBar/>
+
+      <BottomBar />
     </div>
   );
 };

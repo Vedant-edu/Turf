@@ -21,7 +21,8 @@ export default function TurfCard({ turf }: TurfCardProps) {
   };
 
   return (
-    <Link to={`/turf/${turf.id}`} className="block">
+    <div className=''>
+      <Link to={`/turf/${turf.id}`} className="block">
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="relative h-48">
           <img
@@ -63,5 +64,6 @@ export default function TurfCard({ turf }: TurfCardProps) {
         </div>
       </div>
     </Link>
+    </div>
   );
 }
