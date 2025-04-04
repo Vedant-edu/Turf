@@ -6,8 +6,7 @@ import Rebook from './pages/Categories';
 import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
 import Welcome from './pages/Welcome';
-import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
-import BottomBar from './components/BottomBar';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';
 
 function App() {
   return (
