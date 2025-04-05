@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ESP32 Sensor Data</title>
+    <meta http-equiv='refresh' content='3'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #2e3440;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 600;
+        }
+        
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #5e6472;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-title i {
+            font-size: 20px;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 15px;
+        }
+        
+        .data-item {
+            text-align: center;
+            background-color: #fcfcfc;
+            border-radius: 20px;
+            padding: 8px;
+        }
+        
+        .data-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+        
+        .data-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2e3440;
+        }
+        
+        .data-unit {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        /* Card specific colors */
+        .card-axis {
+            background:  #d6eeff;
+            
+        }
+        
+        .card-power {
+            background:#ffecb3;
+           
+        }
+        
+        .card-temperature {
+            background:#ffcdd2;
+           
+        }
+        
+        .alert-container {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+        }
+        
+        .alert {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .temperature-value {
+            font-size: 64px;
+            font-weight: 700;
+            text-align: center;
+            margin: 10px 0;
+            color: #e53935;
+        }
+        
+        .temperature-unit {
+            font-size: 24px;
+            color: #888;
+        }
+    </style>
+    
+</head>
+
+<body>
+    <div class="dashboard">
+        <h1>ESP32 Sensor Dashboard</h1>
+        
+        <div class="bento-grid">
+            <!-- Accelerometer Card -->
+            <div class="card card-axis">
+                <h2 class="card-title"> Axis (ADXL345)</h2>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">X-Axis</div>
+                        <div class="data-value" id="x_acc">0</div>
+                        <div class="data-unit">m/s²</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Y-Axis</div>
+                        <div class="data-value" id="y_acc">0</div>
+                        <div class="data-unit">m/s²</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Z-Axis</div>
+                        <div class="data-value" id="z_acc">0</div>
+                        <div class="data-unit">m/s²</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Power Metrics Card -->
+            <div class="card card-power">
+                <h2 class="card-title"> Power Metrics (INA219)</h2>
+                <div class="data-grid">
+                    <div class="data-item">
+                        <div class="data-label">Voltage</div>
+                        <div class="data-value" id="bus_voltage">0</div>
+                        <div class="data-unit">V</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Current</div>
+                        <div class="data-value" id="current">0</div>
+                        <div class="data-unit">mA</div>
+                    </div>
+                    <div class="data-item">
+                        <div class="data-label">Resistance</div>
+                        <div class="data-value" id="resistance">0</div>
+                        <div class="data-unit">Ω</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Temperature Card (Full Width) -->
+        <div class="card card-temperature">
+            <h2 class="card-title"> Temperature (DS18B20)</h2>
+            <div class="temperature-value" id="temperature">0<span class="temperature-unit">°C</span></div>
+        </div>
+        
+        <!-- Alerts Section -->
+        <div class="alert-container">
+            <p class="alert" id="alert_resistance"></p>
+            <p class="alert" id="alert_temperature"></p>
+        </div>
+    </div>
+</body>
+</html>

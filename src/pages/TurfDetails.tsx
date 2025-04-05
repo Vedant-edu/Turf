@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { format, addDays } from 'date-fns';
 import { ChevronLeft, MapPin, Clock } from 'lucide-react';
 import { turfs } from '../data/turfs';
-import { mockBookings } from '../data/mock';
+// import { mockBookings } from '../data/mock';
 import { useUser } from '@clerk/clerk-react';
 import { createClient } from '@supabase/supabase-js';
 
