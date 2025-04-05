@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { SignedIn, SignedOut } from '@clerk/clerk-react';
 import Home from './pages/Home';
 import TurfDetails from './pages/TurfDetails';
 import BookingConfirmation from './pages/BookingConfirmation';
@@ -6,128 +7,97 @@ import Rebook from './pages/Categories';
 import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
 import Welcome from './pages/Welcome';
-import { SignedIn, SignedOut } from '@clerk/clerk-react';
 
 function App() {
   return (
     <BrowserRouter>
-      <div>
-        <Routes>
-          {/* Protected routes that require authentication */}
-          <Route
-            path="/"
-            element={
-              <>
-                <SignedIn>
-                  <Home />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-          <Route
-            path="/turf/:id"
-            element={
-              <>
-                <SignedIn>
-                  <TurfDetails />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-          <Route
-            path="/booking-confirmation"
-            element={
-              <>
-                <SignedIn>
-                  <BookingConfirmation />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-          <Route
-            path="/rebook"
-            element={
-              <>
-                <SignedIn>
-                  <Rebook />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-          <Route
-            path="/mybooking"
-            element={
-              <>
-                <SignedIn>
-                  <MyBookings />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-          <Route
-            path="/account"
-            element={
-              <>
-                <SignedIn>
-                  <Account />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
+      <Routes>
+        {/* Protected routes (require authentication) */}
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/turf/:id"
+          element={
+            <RequireAuth>
+              <TurfDetails />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/booking-confirmation"
+          element={
+            <RequireAuth>
+              <BookingConfirmation />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/rebook"
+          element={
+            <RequireAuth>
+              <Rebook />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/mybooking"
+          element={
+            <RequireAuth>
+              <MyBookings />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <RequireAuth>
+              <Account />
+            </RequireAuth>
+          }
+        />
 
-          {/* Welcome page */}
-          <Route
-            path="/welcome"
-            element={
-              <>
-                <SignedIn>
-                  <Navigate to="/" replace />
-                </SignedIn>
-                <SignedOut>
-                  <Welcome />
-                </SignedOut>
-              </>
-            }
-          />
+        {/* Public routes */}
+        <Route
+          path="/welcome"
+          element={
+            <PublicOnly>
+              <Welcome />
+            </PublicOnly>
+          }
+        />
 
-          {/* Redirect any other path */}
-          <Route
-            path="*"
-            element={
-              <>
-                <SignedIn>
-                  <Navigate to="/" replace />
-                </SignedIn>
-                <SignedOut>
-                  <Navigate to="/welcome" replace />
-                </SignedOut>
-              </>
-            }
-          />
-        </Routes>
-      </div>
-
-      {/* Only show BottomBar if the user is signed in and not on the welcome page */}
-      
+        {/* Catch-all redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
+  );
+}
+// Component to handle authentication requirement
+function RequireAuth({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SignedIn>{children}</SignedIn>
+      <SignedOut>
+        <Navigate to="/welcome" replace />
+      </SignedOut>
+    </>
+  );
+}
+// Component to prevent authenticated users from accessing public routes
+function PublicOnly({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SignedIn>
+        <Navigate to="/" replace />
+      </SignedIn>
+      <SignedOut>{children}</SignedOut>
+    </>
   );
 }
 
