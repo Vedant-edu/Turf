@@ -22,7 +22,7 @@ export default function TurfCard({ turf }: TurfCardProps) {
 
   return (
     <div className=''>
-      <Link to={`/turf/${turf.id}`} className="block">
+      <Link to={`/turf/${turf.turf_id_new}`} className="block">
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
         <div className="relative h-48">
           <img

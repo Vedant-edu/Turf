@@ -11,7 +11,8 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface Turf {
-  id: string;
+  id: string; // Added 'id' property as required
+  turf_id: string;
   name: string;
   address: string;
   pincode: string;
@@ -20,6 +21,8 @@ interface Turf {
   amenities: string[];
   rating: number;
   availableTimeSlots: string[];
+  turf_id_new: number;
+  email: string;
 }
 
 export default function Home() {
@@ -113,7 +116,7 @@ export default function Home() {
             {loading ? (
               <p className="text-center text-gray-500">Loading turfs...</p>
             ) : filteredTurfs.length > 0 ? (
-              filteredTurfs.map((turf) => <TurfCard key={turf.id} turf={turf} />)
+              filteredTurfs.map((turf) => <TurfCard key={turf.turf_id_new} turf={turf} />) 
             ) : (
               <p className="text-center text-gray-500">No turfs found for this pincode.</p>
             )}

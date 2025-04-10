@@ -79,10 +79,10 @@ export default function AdminTurfManagement() {
       address: t.address,
       pincode: t.pincode,
       images: t.images.join(", "),
-      email: t.email,
-      pricePerHour: t.pricePerHour,
+      email: t.email || "",
+      pricePerHour: t.pricePerHour.toString() || "",
       amenities: t.amenities.join(", "),
-      rating: t.rating,
+      rating: t.rating.toString() || "",
       availableTimeSlots: t.availableTimeSlots.join(", "),
     });
     setEditingId(t.id);
