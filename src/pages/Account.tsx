@@ -63,7 +63,9 @@ export default function Account() {
         <AccountOption icon={<Share2 className="w-6 h-6" />} text="Refer & Earn" />
         <AccountOption icon={<Coins className="w-6 h-6" />} text="Credits: ₹0" />
         <AccountOption icon={<CreditCard className="w-6 h-6" />} text="Saved Payment Methods" />
-        <AccountOption icon={<HelpCircle className="w-6 h-6" />} text="Help & Support" />
+        <div onClick={() => navigate('/admin')}>
+          <AccountOption icon={<HelpCircle className="w-6 h-6" />} text="Help & Support" />
+        </div>
       </div>
       <BottomBar/>
     </div>

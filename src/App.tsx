@@ -7,6 +7,7 @@ import Rebook from './pages/Categories';
 import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
 import Welcome from './pages/Welcome';
+import AdminAddTurf from './pages/admin';
 
 function App() {
   return (
@@ -58,6 +59,14 @@ function App() {
           element={
             <RequireAuth>
               <Account />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth>
+              <AdminAddTurf />
             </RequireAuth>
           }
         />
