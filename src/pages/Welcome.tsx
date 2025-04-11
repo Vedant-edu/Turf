@@ -3,7 +3,7 @@ import { SignInButton } from '@clerk/clerk-react';
 export default function Page() {
   return (
     <>
-      <div className='h-[70vh] mx-auto' style={{ backgroundImage: 'url(/images/image.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className='h-[70vh] mx-auto' style={{ backgroundImage: 'url(https://github.com/Vedant-edu/Turf/blob/main/images/image.png?raw=true)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
       </div>
       <div className=' h-[30vh] p-4'>
