@@ -82,10 +82,10 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className=" ">
       <div className="max-w-7xl mx-auto">
         <div
-          className="max-w-3xl mx-auto h-36 rounded-b-sm home-page-content"
+          className="max-w-3xl mx-auto h-28 rounded-b-sm home-page-content"
           style={{
             backgroundImage:
               "url(https://img.freepik.com/free-photo/abstract-gradient-neon-lights_23-2149279092.jpg?ga=GA1.1.1761220439.1741347886&semt=ais_hybrid&w=740)",
@@ -96,10 +96,10 @@ export default function Home() {
             borderRadius: "0 0 20px 20px",
           }}
         >
-          <h1 className="text-[56px] px-4 flex justify-between text-white font-mono relative z-10">
+          <h1 className="text-[32px] px-4 flex justify-between text-white font-mono relative z-10">
             Turfer
-            <span className="text-sm text-white flex items-end ml-2 mb-6">
-              <MapPin />
+            <span className="text-sm text-white flex items-end m-4">
+              <MapPin className="h-5 w-4" />
               <button onClick={handleChangePincode} className="ml-2 underline">
                 {pincode}
               </button>
@@ -112,7 +112,7 @@ export default function Home() {
             <SearchBar value={searchQuery} onChange={setSearchQuery} />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 px-4 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 lg:px-0 px-4 py-8">
             {loading ? (
               <p className="text-center text-gray-500">Loading turfs...</p>
             ) : filteredTurfs.length > 0 ? (
@@ -120,6 +120,9 @@ export default function Home() {
             ) : (
               <p className="text-center text-gray-500">No turfs found for this pincode.</p>
             )}
+          </div>
+          <div className="h-24">
+            
           </div>
         </div>
       </div>

@@ -75,7 +75,7 @@ const BookingsScreen = () => {
   });
 
   return (
-    <div className="max-w-3xl mx-auto bg-gray-50 min-h-screen">
+    <div className="max-w-3xl mx-auto min-h-screen">
       <AppBarComponent appbartitle="My Bookings" />
 
       <div className="px-4 pt-2 pb-20">

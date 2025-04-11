@@ -93,8 +93,8 @@ const CategoriesScreen: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      <AppBarComponent appbartitle='Categories'/>
+    <div className="mb-24 min-h-screen">
+      <AppBarComponent appbartitle='Categories (coming soon....)'/>
       <div className="max-w-3xl mx-auto px-4">
         
         <div className="grid grid-cols-2 gap-4 mb-6 md:grid-cols-3">

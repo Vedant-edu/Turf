@@ -25,18 +25,15 @@ export default function PincodePage({ onSubmit }: PincodePageProps) {
           <div className="flex justify-center mb-6">
             <MapPin className="w-16 h-16 text-green-600" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to TurfBook</h1>
-          <p className="text-lg text-gray-600">
-            Find and book the perfect turf near you
-          </p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Pincode Please?</h1>
+          {/* <p className="text-lg text-gray-600">
+            Turfer - Find and book the perfect turf near you
+          </p> */}
         </div>
 
         <div className="bg-white p-8 rounded-xl shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
-                Enter your pincode
-              </label>
               <input
                 id="pincode"
                 type="text"

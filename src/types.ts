@@ -1,4 +1,7 @@
 export interface Turf {
+  turf_id_new: any;
+  pincode: string;
+  email: string;
   id: string;
   name: string;
   address: string;

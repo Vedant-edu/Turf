@@ -8,6 +8,7 @@ import MyBookings from './pages/MyBookings';
 import Account from './pages/Account';
 import Welcome from './pages/Welcome';
 import AdminAddTurf from './pages/admin';
+import TurfOwner from './pages/turfowner';
 
 function App() {
   return (
@@ -67,6 +68,14 @@ function App() {
           element={
             <RequireAuth>
               <AdminAddTurf />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/turfowner"
+          element={
+            <RequireAuth>
+              <TurfOwner />
             </RequireAuth>
           }
         />

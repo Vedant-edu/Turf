@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format, addDays } from 'date-fns';
 import { ChevronLeft, MapPin, Clock, Star, Calendar, Info } from 'lucide-react';
-import { turfs } from '../data/turfs';
 import { useUser } from '@clerk/clerk-react';
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -14,14 +13,61 @@ const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export default function TurfDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const turf = turfs.find(t => t.id === id);
+  const [turf, setTurf] = useState<any | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const { user } = useUser();
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const [bookedTimeSlots, setBookedTimeSlots] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Fetch turf details from Supabase
+  useEffect(() => {
+    const fetchTurfDetails = async () => {
+      try {
+        setIsLoading(true);
+        const { data, error: fetchError } = await supabase
+          .from('turf_data')
+          .select('*')
+          .eq('turf_id_new', id)
+          .single();
+
+        if (fetchError) {
+          throw fetchError;
+        }
+
+        if (data) {
+          // Ensure availableTimeSlots is an array
+          if (typeof data.availableTimeSlots === 'string') {
+            data.availableTimeSlots = JSON.parse(data.availableTimeSlots);
+          } else if (!Array.isArray(data.availableTimeSlots)) {
+            data.availableTimeSlots = ['09:00', '11:00', '13:00', '15:00', '17:00', '19:00'];
+          }
+          
+          // Ensure images is an array
+          if (typeof data.images === 'string') {
+            data.images = JSON.parse(data.images);
+          } else if (!Array.isArray(data.images)) {
+            data.images = ['https://via.placeholder.com/800x400?text=Turf+Image'];
+          }
+          
+          setTurf(data);
+        } else {
+          setError('Turf not found');
+        }
+      } catch (err) {
+        console.error('Error fetching turf:', err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTurfDetails();
+  }, [id]);
+
+  // Fetch booked time slots when date is selected
   useEffect(() => {
     const fetchBookings = async () => {
       if (selectedDate && turf) {
@@ -31,7 +77,7 @@ export default function TurfDetails() {
         const { data, error } = await supabase
           .from('bookings')
           .select('booking_time')
-          .eq('turf_id', turf.id)
+          .eq('turf_id_new', turf.turf_id_new)
           .eq('booking_date', formattedDate);
 
         if (error) {
@@ -46,29 +92,12 @@ export default function TurfDetails() {
     fetchBookings();
   }, [selectedDate, turf]);
 
-  if (!turf) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center p-6 max-w-md">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Turf Not Found</h2>
-          <p className="text-gray-600 mb-6">The turf you're looking for doesn't exist or has been removed.</p>
-          <button 
-            onClick={() => navigate('/')}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-          >
-            Browse Available Turfs
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   const handleBooking = async () => {
-    if (selectedDate && selectedTime) {
+    if (selectedDate && selectedTime && turf) {
       setIsLoading(true);
       const bookingData = {
         user_email: userEmail,
-        turf_id: turf.id,
+        turf_id_new: turf.turf_id_new,
         turf_name: turf.name,
         booking_date: format(new Date(selectedDate), 'yyyy-MM-dd'),
         booking_time: selectedTime,
@@ -91,8 +120,53 @@ export default function TurfDetails() {
 
   const isTimeSlotBooked = (time: string) => bookedTimeSlots.includes(time);
 
+  if (isLoading && !turf) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-green-600 mb-4"></div>
+          <p className="text-gray-600">Loading turf details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-6 max-w-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error Loading Turf</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button 
+            onClick={() => navigate('/')}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Browse Available Turfs
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!turf) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center p-6 max-w-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Turf Not Found</h2>
+          <p className="text-gray-600 mb-6">The turf you're looking for doesn't exist or has been removed.</p>
+          <button 
+            onClick={() => navigate('/')}
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Browse Available Turfs
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Header with back button and turf image */}
       <div className="relative">
         <button 
@@ -130,7 +204,7 @@ export default function TurfDetails() {
                 <h1 className="text-2xl font-bold text-gray-900 mb-1">{turf.name}</h1>
                 <div className="flex items-center text-gray-600 mb-3">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
-                  <span className="text-sm font-medium">{turf.rating} •  reviews</span>
+                  <span className="text-sm font-medium">{turf.rating || '4.5'} • {turf.reviews_count || '10'} reviews</span>
                 </div>
               </div>
               <div className="bg-green-50 text-green-800 px-3 py-1 rounded-full text-xl font-medium">
@@ -143,16 +217,16 @@ export default function TurfDetails() {
               <span className="text-sm">{turf.address}</span>
             </div>
 
-            {/* <p className="text-gray-700 mb-6">{turf.description}</p> */}
+            <p className="text-gray-700 mb-6">{turf.description || 'Premium quality turf with excellent facilities'}</p>
 
             {/* Facilities chips */}
             <div className="flex flex-wrap gap-2">
-              {["Parking", "Shower", "Food", "Drinks", "Music"].map((facility, index) => (
+              {turf.facilities && turf.facilities.split(',').map((facility, index) => (
                 <span 
                   key={index}
                   className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
                 >
-                  {facility}
+                  {facility.trim()}
                 </span>
               ))}
             </div>
@@ -167,7 +241,6 @@ export default function TurfDetails() {
 
             {/* Date selection */}
             <div className="mb-8">
-              
               <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
                 {Array.from({ length: 7 }, (_, i) => addDays(new Date(), i)).map(date => {
                   const isSelected = selectedDate && format(new Date(selectedDate), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd');
@@ -259,9 +332,20 @@ export default function TurfDetails() {
                 onClick={handleBooking}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="px-8 py-3 rounded-lg bg-green-600 text-white font-medium shadow-md hover:bg-green-700 flex items-center gap-2"
+                disabled={isLoading}
+                className="px-8 py-3 rounded-lg bg-green-600 text-white font-medium shadow-md hover:bg-green-700 flex items-center gap-2 disabled:opacity-70"
               >
-                Confirm Booking
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </>
+                ) : (
+                  'Confirm Booking'
+                )}
               </motion.button>
             </div>
           </motion.div>
