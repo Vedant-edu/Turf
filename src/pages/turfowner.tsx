@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { Search, Calendar, ArrowUp, ArrowDown, User, Clock, Hash, Edit, X, Plus } from 'lucide-react';
+import { Search, Calendar, ArrowUp, ArrowDown, Clock, Edit, X, Plus } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { format, parseISO, isBefore, isAfter } from 'date-fns';
 import { addDays } from 'date-fns';
@@ -703,9 +703,9 @@ const TurfOwner: React.FC = () => {
                           ${isSelected ? 'bg-green-600 text-white border-transparent' : 'border-gray-600 hover:border-green-400 bg-gray-700'}
                         `}
                       >
-                        <span className="text-xs font-medium">{format(date, 'EEE')}</span>
-                        <span className="text-lg font-semibold">{format(date, 'd')}</span>
-                        <span className="text-xs mt-1">{format(date, 'MMM')}</span>
+                        <span className="text-xs text-white font-medium">{format(date, 'EEE')}</span>
+                        <span className="text-lg text-white font-semibold">{format(date, 'd')}</span>
+                        <span className="text-xs text-white mt-1">{format(date, 'MMM')}</span>
                       </motion.button>
                     );
                   })}
@@ -744,14 +744,14 @@ const TurfOwner: React.FC = () => {
                           whileTap={{ scale: !isBooked ? 0.95 : 1 }}
                           className={`py-3 rounded-lg border flex items-center justify-center gap-1
                             ${isBooked 
-                              ? 'bg-gray-700 text-gray-500 cursor-not-allowed border-gray-600' 
+                              ? 'bg-gray-700 text-gray-200 cursor-not-allowed border-gray-600' 
                               : manualEntryForm.booking_time === time
                                 ? 'bg-green-600 text-white border-transparent shadow-md'
                                 : 'border-gray-600 hover:border-green-400 bg-gray-700'
                             }`}
                         >
-                          <Clock className={`w-4 h-4 ${manualEntryForm.booking_time === time ? 'text-white' : 'text-gray-400'}`} />
-                          <span className="text-sm font-medium">{time}</span>
+                          <Clock className={`w-4 h-4 ${manualEntryForm.booking_time === time ? 'text-white' : 'text-gray-500'}`} />
+                          <span className="text-sm text-gray-400 font-medium ml-2">{time}</span>
                         </motion.button>
                       );
                     })}
