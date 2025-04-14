@@ -56,7 +56,7 @@ export default function TurfDetails() {
         } else {
           setError('Turf not found');
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching turf:', err);
         setError(err.message);
       } finally {
@@ -221,7 +221,7 @@ export default function TurfDetails() {
 
             {/* Facilities chips */}
             <div className="flex flex-wrap gap-2">
-              {turf.facilities && turf.facilities.split(',').map((facility, index) => (
+              {turf.facilities && turf.facilities.split(',').map((facility: string, index: number) => (
                 <span 
                   key={index}
                   className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
@@ -279,7 +279,7 @@ export default function TurfDetails() {
 
               {selectedDate ? (
                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                  {turf.availableTimeSlots.map(time => {
+                  {turf.availableTimeSlots.map((time: string) => {
                     const isBooked = isTimeSlotBooked(time);
                     return (
                       <motion.button
